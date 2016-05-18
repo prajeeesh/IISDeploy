@@ -1,8 +1,21 @@
-<?xml version="1.0"?>
-<Target Name="DeployApp">
-  	<Message Text="Copying application files..." />
-  	<ItemGroup>
-  		<ApplicationFiles Include="$(ApplicationOutputDirectory)\**\*.*" />
-  	</ItemGroup>
-  <Copy SourceFiles="@(ApplicationFiles)" DestinationFolder="$(DestinationPath)\%(RecursiveDir)"/>
- </Target>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <AssemblyName>IISDeployBuild</AssemblyName>
+    <OutputPath>Bin\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="*.cs" />
+  </ItemGroup>
+  <Target Name="Build">
+    <MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+    <Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)$(AssemblyName).exe" />
+  </Target>
+  <Target Name="DeployApp">
+    <Message Text="Copying application files..." />
+    <ItemGroup>
+      <ApplicationFiles Include="$(ApplicationOutputDirectory)\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ApplicationFiles)" DestinationFolder="$(DestinationPath)\%(RecursiveDir)"/>
+  </Target>
+</Project>
+
